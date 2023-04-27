@@ -62,6 +62,11 @@ public class JobRegistryHelper {
 						List<XxlJobGroup> groupList = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().findByAddressType(0);
 						if (groupList!=null && !groupList.isEmpty()) {
 
+							groupList.forEach(xxlJobGroup -> {
+								// 一个是admin一个是executor执行器类型
+								XxlJobAdminConfig.getAdminConfig().xxlJobService().registryByDiscovery(xxlJobGroup, RegistryConfig.RegistType.EXECUTOR.name());
+							});
+
 							// remove dead address (admin/executor)
 							List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
 							if (ids!=null && ids.size()>0) {

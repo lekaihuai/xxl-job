@@ -3,6 +3,7 @@ package com.xxl.job.admin.core.conf;
 import com.xxl.job.admin.core.alarm.JobAlarmer;
 import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
 import com.xxl.job.admin.dao.*;
+import com.xxl.job.admin.service.XxlJobService;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,9 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
     // ---------------------- XxlJobScheduler ----------------------
 
     private XxlJobScheduler xxlJobScheduler;
+
+    @Resource
+    private XxlJobService xxlJobService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -155,4 +159,7 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
         return jobAlarmer;
     }
 
+    public XxlJobService xxlJobService(){
+        return xxlJobService;
+    }
 }

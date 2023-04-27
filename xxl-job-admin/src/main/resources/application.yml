@@ -1,0 +1,110 @@
+# web
+server:
+  port: 8080
+  servlet:
+    context-path: /xxl-job-admin
+
+# resources
+spring:
+  application:
+    name: xxl_job
+  mvc:
+    servlet:
+      load-on-startup: 0
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/**
+  datasource:
+    url: jdbc:mysql://192.168.1.240:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: aA!@#$5678
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 30
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: HikariCP
+      max-lifetime: 900000
+      connection-timeout: 10000
+      connection-test-query: SELECT 1
+      validation-timeout: 1000
+  # freemarker
+  freemarker:
+    templateLoaderPath: classpath:/templates/
+    suffix: .ftl
+    charset: UTF-8
+    request-context-attribute: request
+    settings:
+      number_format: 0.##########
+  mail:
+    host: smtp.qq.com
+    port: 25
+    username: xxx@qq.com
+    from: xxx@qq.com
+    password: xxx
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+
+# 开启和暴露端点
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+    logfile:
+      #可在线查看日志
+      enabled: true
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+# 自定义项目信息
+info:
+  project-name: ${spring.application.name}
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
+  # type-aliases-package: com.xxl.job.admin.core.model
+
+# xxl-job, access token
+xxl:
+  job:
+    accessToken: default_token
+    i18n: zh_CN
+    triggerpool:
+      fast:
+        max: 200
+      slow:
+        max: 100
+    logretentiondays: 30
+
+# 注册中心配置
+eureka:
+  instance:
+    hostname: 192.168.1.240
+    ip-address: 192.168.1.240
+    prefer-ip-address: true
+    instance-id: ${eureka.instance.ip-address}:8080
+    metadata-map:
+      auth-code: HWXXXXXXXXXH3xhUTaXnA==    #授权码，申请时反馈
+      service-sys: SDWRJXJYY  #微服务所属系统，申请时反馈
+      service-namespace: SDWRJXJYY  #微服务所属业务域，申请时反馈
+      service-name: drone_internet_xxljob                    #微服务名称
+      service-desc: 分布式调度中心              #微服务描述
+  client:
+    registry-fetch-interval-seconds: 10
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/   #eureka服务端注册地址，根据实际情况填写
